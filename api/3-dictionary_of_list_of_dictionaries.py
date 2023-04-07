@@ -44,4 +44,3 @@ if __name__ == "__main__":
 
     with open("todo_all_employees.json", "w") as f:
         json.dump(all_todo_data, f)
-
