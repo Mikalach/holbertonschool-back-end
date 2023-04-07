@@ -26,21 +26,22 @@ def get_employee_todo_progress(employee_id):
             csv_writer.writerow([employee_id, employee_name,
                                  task["completed"], task["title"]])
 
-    return todo_list
+    return todo_list, employee_name
 
 
 if __name__ == "__main__":
     all_todo_data = {}
 
     for employee_id in range(1, 11):
-        todo_list = get_employee_todo_progress(employee_id)
+        todo_list, employee_name = get_employee_todo_progress(employee_id)
         all_todo_data[employee_id] = []
         for task in todo_list:
             all_todo_data[employee_id].append(
-                {"username": task["userId"],
+                {"username": employee_name,
                  "task": task["title"],
                  "completed": task["completed"]}
             )
 
     with open("todo_all_employees.json", "w") as f:
         json.dump(all_todo_data, f)
+
