@@ -16,7 +16,6 @@ def get_employee_todo_progress(employee_id):
     query = {"userId": employee_id}
     response = requests.get(todos_url, params=query)
 
-
     todo_list = response.json()
     total_tasks = len(todo_list)
     done_tasks = sum(1 for task in todo_list if task["completed"])
@@ -26,7 +25,8 @@ def get_employee_todo_progress(employee_id):
         csv_writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for task in todo_list:
 
-            csv_writer.writerow([employee_id, employee_name, task["completed"], task["title"]])
+            csv_writer.writerow([employee_id, employee_name,
+                                 task["completed"], task["title"]])
 
     print(f"Todo list exported to {employee_id}.csv")
 
