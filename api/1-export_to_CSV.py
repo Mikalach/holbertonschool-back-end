@@ -32,23 +32,13 @@ def get_employee_todo_progress(employee_id):
     total_tasks = len(todo_list)
     done_tasks = sum(1 for task in todo_list if task["completed"])
 
-    # Print output
-    print(f"Employee {employee_name} is done with tasks"
-          f"({done_tasks}/{total_tasks}):")
-    for task in todo_list:
-        task_title = task["title"].replace('"""', '"')
-        task_title = f'"{task_title}"'
-        task_status = str(task["completed"])
-        print(f'"{employee_id}","{employee_name}","{task_status}",{task_title}')
-
     # Export data to CSV file
     with open(f"{employee_id}.csv", "w") as f:
         csv_writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for task in todo_list:
-            task_title = task["title"].replace('"""', '"')
-            task_title = f'"{task_title}"'
-            task_status = str(task["completed"])
-            csv_writer.writerow([employee_id, employee_name, task_status, task_title])
+
+            
+            csv_writer.writerow([employee_id, employee_name, task["completed"], task["title"]])
 
     print(f"Todo list exported to {employee_id}.csv")
 
