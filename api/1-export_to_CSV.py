@@ -40,13 +40,14 @@ def get_employee_todo_progress(employee_id):
 
     # Export data to CSV file
     with open(f"{employee_id}.csv", "w") as f:
-        f.write('"USER_ID","USERNAME","TASK_COMPLETED_STATUS","TASK_TITLE"\n')
+        csv_writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for task in todo_list:
-            task_title = f'{task["title"]}'
+            task_title = f'"{task["title"]}"'
             task_status = str(task["completed"])
-            f.write(f'"{employee_id}","{employee_name}","{task_status}","{task_title}"\n')
+            csv_writer.writerow([employee_id, employee_name, task_status, task_title])
 
     print(f"Todo list exported to {employee_id}.csv")
+
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Error: Employee ID is required.")
