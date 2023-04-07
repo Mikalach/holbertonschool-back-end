@@ -7,6 +7,7 @@ import requests
 import sys
 import csv
 
+
 def get_employee_todo_progress(employee_id):
     # Fetch employee name
     users_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
@@ -16,7 +17,6 @@ def get_employee_todo_progress(employee_id):
         return
 
     employee_name = response.json()["name"]
-    username = response.json()["username"]
 
     # Fetch todo list for the employee
     todos_url = "https://jsonplaceholder.typicode.com/todos"
@@ -30,20 +30,23 @@ def get_employee_todo_progress(employee_id):
     total_tasks = len(todo_list)
     done_tasks = sum(1 for task in todo_list if task["completed"])
 
-    # Export to CSV
-    filename = f"{employee_id}.csv"
-    with open(filename, mode="w", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow(["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"])
-        for task in todo_list:
-            task_completed_status = "Complete" if task["completed"] else "Incomplete"
-            task_title = task["title"]
-            writer.writerow([employee_id, username, task_completed_status, task_title])
-
     # Print output
     print(f"Employee {employee_name} is done with tasks"
-          f"({done_tasks}/{total_tasks}). Exported to {filename}.")
+          f"({done_tasks}/{total_tasks}):")
+    for task in todo_list:
+        task_title = f'"{task["title"]}"'
+        task_status = str(task["completed"])
+        print(f'"{employee_id}","{employee_name}","{task_status}","{task_title}"')
 
+    # Export data to CSV file
+    with open(f"{employee_id}.csv", "w") as f:
+        f.write('"USER_ID","USERNAME","TASK_COMPLETED_STATUS","TASK_TITLE"\n')
+        for task in todo_list:
+            task_title = f'"{task["title"]}"'
+            task_status = str(task["completed"])
+            f.write(f'"{employee_id}","{employee_name}","{task_status}","{task_title}"\n')
+
+    print(f"Todo list exported to {employee_id}.csv")
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Error: Employee ID is required.")
