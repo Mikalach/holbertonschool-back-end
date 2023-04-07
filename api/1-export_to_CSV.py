@@ -1,7 +1,9 @@
 #!/usr/bin/python3
+"""documented"""
 import requests
 import sys
 import csv
+
 
 def verif(request):
     """ check for request status """
