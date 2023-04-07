@@ -1,12 +1,14 @@
-#!/usr/bin/python3
-"""
-Fetches todo list progress for a given employee ID from a REST API
-and exports it to a CSV file
-"""
 import requests
 import sys
 import csv
 
+def verif(request):
+    """ check for request status """
+    print(request)
+    print(request.status_code)
+    print(request.headers)
+    print(request.text)
+    print(request.json())
 
 def get_employee_todo_progress(employee_id):
     # Fetch employee name
@@ -34,15 +36,17 @@ def get_employee_todo_progress(employee_id):
     print(f"Employee {employee_name} is done with tasks"
           f"({done_tasks}/{total_tasks}):")
     for task in todo_list:
-        task_title = f'"{task["title"]}"'
+        task_title = task["title"].replace('"""', '"')
+        task_title = f'"{task_title}"'
         task_status = str(task["completed"])
-        print(f'"{employee_id}","{employee_name}","{task_status}","{task_title}"')
+        print(f'"{employee_id}","{employee_name}","{task_status}",{task_title}')
 
     # Export data to CSV file
     with open(f"{employee_id}.csv", "w") as f:
         csv_writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for task in todo_list:
-            task_title = f'"{task["title"]}"'
+            task_title = task["title"].replace('"""', '"')
+            task_title = f'"{task_title}"'
             task_status = str(task["completed"])
             csv_writer.writerow([employee_id, employee_name, task_status, task_title])
 
