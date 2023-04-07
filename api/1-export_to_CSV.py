@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """documented"""
+import csv
 import requests
 import sys
-import csv
+
 
 
 def verif(request):
