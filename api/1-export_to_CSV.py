@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 import requests
 import sys
 import csv
@@ -37,7 +38,6 @@ def get_employee_todo_progress(employee_id):
         csv_writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for task in todo_list:
 
-            
             csv_writer.writerow([employee_id, employee_name, task["completed"], task["title"]])
 
     print(f"Todo list exported to {employee_id}.csv")
