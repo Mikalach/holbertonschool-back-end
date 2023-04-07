@@ -33,7 +33,7 @@ def get_employee_todo_progress(employee_id):
           f"({done_tasks}/{total_tasks}):")
     for task in todo_list:
         if task["completed"]:
-            print(f"\t{task['title']}")
+            print(f"\t {task['title']}")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
