@@ -19,7 +19,8 @@ def get_employee_todo_progress(employee_id):
     todo_list = response.json()
     tasks = []
     for task in todo_list:
-        task_data = {"task": task["title"], "completed": task["completed"], "username": employee_name}
+        task_data = {"task": task["title"], "completed": task["completed"],
+                    "username": employee_name}
         tasks.append(task_data)
 
     # Export data to CSV file
