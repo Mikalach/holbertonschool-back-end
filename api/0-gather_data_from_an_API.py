@@ -6,38 +6,45 @@ Fetches todo list progress for a given employee ID from a REST API
 import requests
 import sys
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: ./todo.py <employee_id>")
-        sys.exit(1)
 
-    employee_id = int(sys.argv[1])
+def get_employee_info(employee_id):
+    """Returns employee's todo list progress"""
 
+    # Fetch user name
     users_url = "https://jsonplaceholder.typicode.com/users"
+    resp = requests.get(users_url).json()
+    name = None
+    for user in resp:
+        if user['id'] == employee_id:
+            name = user['name']
+            break
+
+    if not name:
+        print("Employee not found.")
+        return
+
+    # Fetch todos for the user
     todos_url = "https://jsonplaceholder.typicode.com/todos"
+    params = {'userId': employee_id}
+    resp = requests.get(todos_url, params=params).json()
 
-    # Fetch user information
-    user = None
-    resp = requests.get(users_url, params={"id": employee_id})
-    if resp.ok:
-        user = resp.json()[0]
+    # Parse todo list and count completed tasks
+    completed_tasks = []
+    for todo in resp:
+        if todo['completed']:
+            completed_tasks.append(todo['title'])
 
-    if not user:
-        print("Employee not found")
-        sys.exit(1)
-
-    # Fetch user's TODO list
-    todos = []
-    resp = requests.get(todos_url, params={"userId": employee_id})
-    if resp.ok:
-        todos = resp.json()
-
-    total_tasks = len(todos)
-    done_tasks = sum(1 for todo in todos if todo["completed"])
-    task_titles = [todo["title"] for todo in todos if todo["completed"]]
+    num_completed_tasks = len(completed_tasks)
+    num_total_tasks = len(resp)
 
     # Print output
-    print("Employee {} is done with tasks({}/{}):".format(
-        user["name"], done_tasks, total_tasks))
-    for title in task_titles:
-        print("\t {}".format(title))
+    print(f"Employee {name} is done with tasks({num_completed_tasks}/{num_total_tasks}):")
+    for task in completed_tasks:
+        print(f"\t{task}")
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        print("Usage: python todo.py EMPLOYEE_ID")
+    else:
+        get_employee_info(int(sys.argv[1]))
