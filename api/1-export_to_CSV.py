@@ -5,32 +5,17 @@ import requests
 import sys
 
 
-
-def verif(request):
-    """ check for request status """
-    print(request)
-    print(request.status_code)
-    print(request.headers)
-    print(request.text)
-    print(request.json())
-
 def get_employee_todo_progress(employee_id):
     # Fetch employee name
     users_url = f"https://jsonplaceholder.typicode.com/users/{employee_id}"
     response = requests.get(users_url)
-    if response.status_code != 200:
-        print("Error: Employee not found.")
-        return
-
-    employee_name = response.json()["name"]
+    employee_name = response.json()["username"]
 
     # Fetch todo list for the employee
     todos_url = "https://jsonplaceholder.typicode.com/todos"
     query = {"userId": employee_id}
     response = requests.get(todos_url, params=query)
-    if response.status_code != 200:
-        print("Error: Todo list not found for the employee.")
-        return
+
 
     todo_list = response.json()
     total_tasks = len(todo_list)
