@@ -20,7 +20,7 @@ def get_employee_todo_progress(employee_id):
     tasks = []
     for task in todo_list:
         task_data = {"task": task["title"], "completed": task["completed"],
-                    "username": employee_name}
+                      "username": employee_name}
         tasks.append(task_data)
 
     # Export data to CSV file
